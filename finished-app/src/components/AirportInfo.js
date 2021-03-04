@@ -1,43 +1,47 @@
-import React, { useState } from 'react';
-import './AirportInfo.css';
-import Places from './Places';
+import React, { useState } from "react";
+import "./AirportInfo.css";
+import Places from "./Places";
+import { Row, Col, Menu, Dropdown } from "antd";
+import "antd/dist/antd.css";
 
-function AirportInfo() { 
-    const [places,setPlaces] = useState([])
-    const [query,setQuery] = useState("")
-    const [showPlaces,setShowPlaces] = useState(false)
+import InputDropdown from "./InputDropdown";
 
-    function handleSubmit(e) {
-        e.preventDefault()
-        async function fetchMyAPI() {
-            const reqOptions = {
-                method: 'GET',
-                headers: {
-                    "x-rapidapi-key": `${process.env.REACT_APP_API_KEY}`,
-                    "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-                    "useQueryString": true
-                }
-            }
-            let response = await fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/USD/en-US/?" + new URLSearchParams({query: query}), reqOptions)
-            response = await response.json()
-            console.log(response.Places)
-            setPlaces(response.Places)
-        }
-        fetchMyAPI()
-        setShowPlaces(true)
-        setQuery("")
-    }
+const { SubMenu } = Menu;
 
-    return(
+function AirportInfo() {
+    const [places, setPlaces] = useState([]);
+    const [fromQuery, setFromQuery] = useState("");
+    const [toQuery, setToQuery] = useState("");
+    const [showPlaces, setShowPlaces] = useState(false);
+
+    return (
         <div className="airportinfo">
-           <form onSubmit={handleSubmit}>
-                <label htmlFor="queryInput">State or Country:</label>
-                <input id="queryInput" value={query} onChange={e => setQuery(e.target.value)} required/>
-                <button className="search">Submit</button>
-           </form>
-           { showPlaces ? <Places places={places}></Places> : <></>}
+            <form>
+                <Row span={24}>
+                    <InputDropdown
+                        title="From"
+                        query={fromQuery}
+                        setQuery={setFromQuery}
+                        setPlaces={setPlaces}
+                        setShowPlaces={setShowPlaces}
+                        // handleChange={handleChange}
+                    />
+                    <InputDropdown
+                        title="To"
+                        query={toQuery}
+                        setQuery={setToQuery}
+                        setPlaces={setPlaces}
+                        setShowPlaces={setShowPlaces}
+                        // handleChange={handleChange}
+                    />
+                    <Col span={4}>
+                        <button className="search">Submit</button>
+                    </Col>
+                </Row>
+            </form>
+            <Row>{showPlaces ? <Places places={places}></Places> : <></>}</Row>
         </div>
-    )
+    );
 }
 
 export default AirportInfo;

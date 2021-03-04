@@ -1,9 +1,8 @@
-import React from 'react';
-import './Places.css';
+import React from "react";
+import "./Places.css";
 
-function Places(props) { 
-
-    return(
+function Places(props) {
+    return (
         <div className="places">
             <table>
                 <thead>
@@ -17,20 +16,26 @@ function Places(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.places.map(place => {
-                        return (<tr id={place.PlaceId}>
-                            <th>{place.PlaceId}</th>
-                            <th>{place.PlaceName}</th>
-                            <th>{place.CountryId}</th>
-                            <th>{place.RegionId}</th>
-                            <th>{place.CityId}</th>
-                            <th>{place.CountryName}</th>
-                        </tr>)
-                    })}
+                    {props.places ? (
+                        props.places.map((place) => {
+                            return (
+                                <tr id={place.PlaceId}>
+                                    <th>{place.PlaceId}</th>
+                                    <th>{place.PlaceName}</th>
+                                    <th>{place.CountryId}</th>
+                                    <th>{place.RegionId}</th>
+                                    <th>{place.CityId}</th>
+                                    <th>{place.CountryName}</th>
+                                </tr>
+                            );
+                        })
+                    ) : (
+                        <></>
+                    )}
                 </tbody>
             </table>
-         </div>
-    )
+        </div>
+    );
 }
 
 export default Places;
