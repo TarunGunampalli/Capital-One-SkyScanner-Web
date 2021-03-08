@@ -17,8 +17,7 @@ function findFlights(from, to, startDate, endDate) {
         const reqOptions = {
             method: "GET",
             headers: {
-                "x-rapidapi-key":
-                    "9e64b0c30emsh910fb5c9bcac2bfp1a8530jsna4cdff439f5c",
+                "x-rapidapi-key": `${process.env.REACT_APP_API_KEY}`,
                 "x-rapidapi-host":
                     "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
             },
