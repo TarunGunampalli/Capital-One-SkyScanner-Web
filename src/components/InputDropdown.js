@@ -1,15 +1,18 @@
-import React, { useState } from "react";
-import "./InputDropdown.css";
-import Places from "./Places";
-import { Input, Row, Col, Menu, Dropdown } from "antd";
+import React from "react";
+import { Input, Col, Menu, Dropdown } from "antd";
 import "antd/dist/antd.css";
+// debounce function to prevent constant api calls
+import { debounce } from "lodash";
 
-const { SubMenu } = Menu;
+// styling
+import "./AirportInfo.css";
+import "./InputDropdown.css";
 
-function handleChange(e, setResponse) {
-    e.preventDefault();
-    console.log(e);
-    async function fetchMyAPI() {
+function handleChange(e, setPlaces) {
+    async function callPlaces() {
+        const endpoint =
+            "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/USD/en-US/?" +
+            new URLSearchParams({ query: e });
         const reqOptions = {
             method: "GET",
             headers: {
@@ -19,60 +22,72 @@ function handleChange(e, setResponse) {
                 useQueryString: true,
             },
         };
-        let response = await fetch(
-            "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/USD/en-US/?" +
-                new URLSearchParams({ query: e.target.value }),
-            reqOptions
-        );
-        response = await response.json();
 
-        let ids = response.Places.map((place) => place.PlaceId);
-        let names = response.Places.map((place) => place.PlaceName);
-        response = Object.assign(...ids.map((id, i) => ({ [id]: names[i] })));
-
-        setResponse(response);
-        console.log(response);
+        if (e) {
+            let response = await fetch(endpoint, reqOptions);
+            if (response.status === 200) {
+                response = await response.json();
+                let names = response.Places.map((place) => place.PlaceName);
+                let ids = response.Places.map((place) => place.PlaceId);
+                if (names.length && ids.length) {
+                    response = await Object.assign(
+                        ...names.map((name, i) => ({ [name]: ids[i] }))
+                    );
+                    setPlaces(response);
+                } else {
+                    setPlaces({});
+                }
+            } else {
+                setPlaces({});
+            }
+        } else {
+            setPlaces({});
+        }
     }
-    fetchMyAPI();
+    callPlaces();
 }
 
 function InputDropdown(props) {
-    const [response, setResponse] = useState({ hi: "world" });
-
     return (
-        <Col span={10}>
-            <Row>
-                <label className="locationlabel" htmlFor="queryInput">
-                    {props.title}
-                </label>
-            </Row>
-            <Row>
-                <Dropdown
-                    overlay={
-                        <Menu>
-                            {Object.values(response) ? (
-                                Object.values(response).map((placeName) => (
-                                    <Menu.Item>{placeName}</Menu.Item>
-                                ))
-                            ) : (
-                                <></>
-                            )}
+        <Col>
+            <Dropdown
+                overlay={
+                    Object.keys(props.places).length ? (
+                        <Menu
+                            onClick={(e) => {
+                                props.setQuery(e.key);
+                                debounce(
+                                    () => handleChange(e.key, props.setPlaces),
+                                    200
+                                )();
+                            }}
+                        >
+                            {Object.keys(props.places).map((placeName) => (
+                                <Menu.Item key={placeName}>
+                                    {placeName}
+                                </Menu.Item>
+                            ))}
                         </Menu>
-                    }
-                    trigger="click"
-                >
-                    <Input
-                        className="locationinput"
-                        id="queryInput"
-                        value={props.query}
-                        onChange={(e) => {
-                            props.setQuery(e.target.value);
-                            handleChange(e, setResponse);
-                            console.log(response);
-                        }}
-                    />
-                </Dropdown>
-            </Row>
+                    ) : (
+                        <></>
+                    )
+                }
+                trigger="hover"
+            >
+                <Input
+                    id="queryInput"
+                    placeholder={props.title}
+                    value={props.query}
+                    onChange={(e) => {
+                        props.setQuery(e.target.value);
+                        e.preventDefault();
+                        debounce(
+                            () => handleChange(e.target.value, props.setPlaces),
+                            200
+                        )();
+                    }}
+                />
+            </Dropdown>
         </Col>
     );
 }

@@ -16,15 +16,18 @@ form {
     align-items: center;
 }
 
-.search {
-    background-color: #008140;
-    padding: 20px 20px;
-    height: 10px;
-    color: white;
-    border-radius: 12px;
-    display: block;
-    line-height: 0px;
-    font-size: 16px;
+.datepicker {
+    height: 45px;
+    border-radius: 5px;
+}
+
+.submitbutton {
+    height: 45px;
+    border-radius: 5px;
+}
+.datelabel {
+    font-size: 15px;
+    padding-bottom: 10px;
 }
 
 label {

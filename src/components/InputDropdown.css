@@ -1,7 +1,8 @@
 .locationlabel {
     padding-left: 15px;
+    font-size: 15px;
 }
 
 .locationinput {
-    width: 90%;
+    width: 95%;
 }
