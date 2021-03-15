@@ -4,13 +4,16 @@ import { Row, Col, DatePicker, Dropdown, Menu, Button } from "antd";
 import "antd/dist/antd.css";
 
 // styling and inner components
-import "./SearchBar.css";
+import "./style/SearchBar.css";
 import InputDropdown from "./InputDropdown";
 
 const { RangePicker } = DatePicker;
 
-// function taken from thesofakillers on github that converts an object of arrays to an
-// array of objects
+/**
+ *
+ * @param object_arrays is the original object of arrays that needs to be converted to an array of objects
+ * @returns an array of objects
+ */
 function convertData(object_arrays) {
     let final_array = object_arrays[Object.keys(object_arrays)[0]].map(
         (el, i) => {
@@ -24,6 +27,11 @@ function convertData(object_arrays) {
     return final_array;
 }
 
+/**
+ *
+ * @param entries the response data that needs to be sifted
+ * @returns the entries with only the data needed for the table
+ */
 function siftInfo(entries) {
     let result = [];
     entries.forEach((entry, i) => {
@@ -43,6 +51,12 @@ function siftInfo(entries) {
     return result;
 }
 
+/**
+ * uses the skyscanner api to search for places with airports
+ * @param e the search input to search for
+ * @param setPlaces the function to set a list of places for the dropdown
+ * @param currency the currency to use in the search
+ */
 function searchPlaces(e, setPlaces, currency) {
     currency = currency ? currency : "USD";
     async function callPlaces() {
@@ -83,7 +97,11 @@ function searchPlaces(e, setPlaces, currency) {
     callPlaces();
 }
 
-function searchCurrencies(e, setCurrencies) {
+/**
+ * uses the skyscanner api to get a list of currencies to choose from
+ * @param setCurrencies the function to set the list of currencies for the dropdown
+ */
+function searchCurrencies(setCurrencies) {
     async function callPrices() {
         const endpoint =
             "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/currencies";
@@ -97,17 +115,24 @@ function searchCurrencies(e, setCurrencies) {
             },
         };
 
-        if (e) {
-            let response = await fetch(endpoint, reqOptions);
-            if (response.status === 200) {
-                response = await response.json();
-                setCurrencies(response.Currencies);
-            }
+        let response = await fetch(endpoint, reqOptions);
+        if (response.status === 200) {
+            response = await response.json();
+            setCurrencies(response.Currencies);
         }
     }
     callPrices();
 }
 
+/**
+ * uses the skyscanner api to find quotes for flight routes
+ * @param from the initial location to fly from
+ * @param to the destination to fly to
+ * @param startDate the outbound date for the first flight
+ * @param endDate the optional inbound date for the return flight
+ * @param currency the currency to return prices in
+ * @param setEntries the function used to set the entries of the table
+ */
 function findFlights(from, to, startDate, endDate, currency, setEntries) {
     currency = currency ? currency : "USD";
     async function callQuotes() {
@@ -128,9 +153,6 @@ function findFlights(from, to, startDate, endDate, currency, setEntries) {
         let response = await fetch(endpoint, reqOptions);
         if (response.status === 200) {
             response = await response.json();
-            console.log(response);
-            console.log(convertData(response));
-            console.log(siftInfo(convertData(response)));
             setEntries(siftInfo(convertData(response)));
         }
     }
@@ -210,8 +232,8 @@ function SearchBar(props) {
                     <Button
                         className="currencybutton"
                         size={"large"}
-                        onClick={(e) => {
-                            searchCurrencies(e, setCurrencies);
+                        onClick={() => {
+                            searchCurrencies(setCurrencies);
                         }}
                     >
                         {currency ? currency : "Select Currency"}

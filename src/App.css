@@ -7,6 +7,13 @@
   background-color: rgb(122, 122, 122);
 }
 
+.lowestprice {
+  font-size: 2.6rem;
+  font-family: "Helvetica", Sans-Serif;
+  padding-top: 30px;
+
+}
+
 .table {
   width: 70%;
   padding-top: 30px;

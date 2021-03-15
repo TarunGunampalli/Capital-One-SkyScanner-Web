@@ -5,8 +5,8 @@ import "antd/dist/antd.css";
 import { debounce } from "lodash";
 
 // styling
-import "./SearchBar.css";
-import "./InputDropdown.css";
+import "./style/SearchBar.css";
+import "./style/InputDropdown.css";
 
 function InputDropdown(props) {
     return (
