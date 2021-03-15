@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/skyscanner/static/css/main.c2e51f8d.chunk.css",
+    "main.js": "/skyscanner/static/js/main.8e6024b9.chunk.js",
+    "main.js.map": "/skyscanner/static/js/main.8e6024b9.chunk.js.map",
+    "runtime-main.js": "/skyscanner/static/js/runtime-main.7ec54d8b.js",
+    "runtime-main.js.map": "/skyscanner/static/js/runtime-main.7ec54d8b.js.map",
+    "static/css/2.fc2db407.chunk.css": "/skyscanner/static/css/2.fc2db407.chunk.css",
+    "static/js/2.c3ce0c7e.chunk.js": "/skyscanner/static/js/2.c3ce0c7e.chunk.js",
+    "static/js/2.c3ce0c7e.chunk.js.map": "/skyscanner/static/js/2.c3ce0c7e.chunk.js.map",
+    "static/js/3.e5c72716.chunk.js": "/skyscanner/static/js/3.e5c72716.chunk.js",
+    "static/js/3.e5c72716.chunk.js.map": "/skyscanner/static/js/3.e5c72716.chunk.js.map",
+    "index.html": "/skyscanner/index.html",
+    "static/css/2.fc2db407.chunk.css.map": "/skyscanner/static/css/2.fc2db407.chunk.css.map",
+    "static/css/main.c2e51f8d.chunk.css.map": "/skyscanner/static/css/main.c2e51f8d.chunk.css.map",
+    "static/js/2.c3ce0c7e.chunk.js.LICENSE.txt": "/skyscanner/static/js/2.c3ce0c7e.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7ec54d8b.js",
+    "static/css/2.fc2db407.chunk.css",
+    "static/js/2.c3ce0c7e.chunk.js",
+    "static/css/main.c2e51f8d.chunk.css",
+    "static/js/main.8e6024b9.chunk.js"
+  ]
+}

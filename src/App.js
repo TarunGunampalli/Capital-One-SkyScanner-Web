@@ -1,17 +1,44 @@
-import React from 'react';
-import './App.css';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import AirportInfo from './components/AirportInfo';
+import React, { useState } from "react";
+import { Table } from "antd";
 
-function App() {
-  return (
-    <div className="App">
-      <Header title="Airport Info"></Header>
-      <AirportInfo></AirportInfo>
-      <Footer title="2020"></Footer>
-    </div>
-  );
+import "./App.css";
+import SearchBar from "./components/SearchBar";
+
+export default function App() {
+    const [entries, setEntries] = useState([]);
+
+    return (
+        <div className="App">
+            <SearchBar setEntries={setEntries}></SearchBar>
+            <Table
+                className="table"
+                dataSource={entries}
+                columns={getColumns(entries)}
+            ></Table>
+        </div>
+    );
 }
 
-export default App;
+function getColumns(entries) {
+    const symbol = entries[0]?.Symbol ? "(" + entries[0]?.Symbol + ")" : "";
+    const columns = [
+        {
+            title: "Carrier",
+            dataIndex: "Carrier",
+            key: "Carrier",
+        },
+        {
+            title: "Departure Location",
+            dataIndex: "Place",
+            key: "Place",
+        },
+        {
+            title: `Price ${symbol}`,
+            dataIndex: "Price",
+            key: "Price",
+            sorter: (x, y) => x.Price - y.Price,
+            sortDirections: ["descend", "ascend"],
+        },
+    ];
+    return columns;
+}

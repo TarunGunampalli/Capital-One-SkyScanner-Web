@@ -1,0 +1,37 @@
+.searchbar {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.datepicker {
+    border-radius: 5px;
+}
+
+.submitbutton {
+    border-radius: 5px;
+}
+.datelabel {
+    font-size: 15px;
+    padding-bottom: 10px;
+}
+
+.currencybutton {
+    border-radius: 5px;
+    min-width: 60%;
+}
+
+.currencyselector {
+    max-height: 250px;
+    overflow-y: scroll;
+}
+
+label {
+    font-size: 20px;
+}

@@ -5,67 +5,30 @@ import "antd/dist/antd.css";
 import { debounce } from "lodash";
 
 // styling
-import "./AirportInfo.css";
+import "./SearchBar.css";
 import "./InputDropdown.css";
-
-function handleChange(e, setPlaces) {
-    async function callPlaces() {
-        const endpoint =
-            "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/USD/en-US/?" +
-            new URLSearchParams({ query: e });
-        const reqOptions = {
-            method: "GET",
-            headers: {
-                "x-rapidapi-key": `${process.env.REACT_APP_API_KEY}`,
-                "x-rapidapi-host":
-                    "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-                useQueryString: true,
-            },
-        };
-
-        if (e) {
-            let response = await fetch(endpoint, reqOptions);
-            if (response.status === 200) {
-                response = await response.json();
-                let names = response.Places.map((place) => place.PlaceName);
-                let ids = response.Places.map((place) => place.PlaceId);
-                if (names.length && ids.length) {
-                    response = await Object.assign(
-                        ...names.map((name, i) => ({ [name]: ids[i] }))
-                    );
-                    setPlaces(response);
-                } else {
-                    setPlaces({});
-                }
-            } else {
-                setPlaces({});
-            }
-        } else {
-            setPlaces({});
-        }
-    }
-    callPlaces();
-}
 
 function InputDropdown(props) {
     return (
         <Col>
             <Dropdown
                 overlay={
-                    Object.keys(props.places).length ? (
+                    props.list.length ? (
                         <Menu
                             onClick={(e) => {
                                 props.setQuery(e.key);
                                 debounce(
-                                    () => handleChange(e.key, props.setPlaces),
+                                    () =>
+                                        props.handleChange(
+                                            e.key,
+                                            props.setList
+                                        ),
                                     200
                                 )();
                             }}
                         >
-                            {Object.keys(props.places).map((placeName) => (
-                                <Menu.Item key={placeName}>
-                                    {placeName}
-                                </Menu.Item>
+                            {props.list.map((name) => (
+                                <Menu.Item key={name}>{name}</Menu.Item>
                             ))}
                         </Menu>
                     ) : (
@@ -75,14 +38,19 @@ function InputDropdown(props) {
                 trigger="hover"
             >
                 <Input
-                    id="queryInput"
+                    className="locationinput"
+                    size={"large"}
                     placeholder={props.title}
                     value={props.query}
                     onChange={(e) => {
                         props.setQuery(e.target.value);
                         e.preventDefault();
                         debounce(
-                            () => handleChange(e.target.value, props.setPlaces),
+                            () =>
+                                props.handleChange(
+                                    e.target.value,
+                                    props.setList
+                                ),
                             200
                         )();
                     }}
